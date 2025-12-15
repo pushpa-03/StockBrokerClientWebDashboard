@@ -95,17 +95,17 @@ Create a Stock Broker Client Web Dashboard that allows users to:
 
 ## Run Project Locally
 
-### Backend Setup
 ```bash
+//Backend
 cd server
 npm install
 node index.js
-npm start
 
-### Frontend Setup
-```bash
+//Frontend
 cd client
 npm install
+npm start
+
 
 ---
 
