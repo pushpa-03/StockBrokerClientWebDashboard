@@ -1,6 +1,6 @@
 # Stock Broker Client Web Dashboard
 
-This project is a **real-time Stock Broker Client Web Dashboard** developed as part of the **Escrow Stack placement hiring assignment**.  
+This project is a **real-time Stock Broker Client Web Dashboard**.  
 The application enables users to log in, subscribe to stock tickers, and receive **live stock price updates without refreshing the page**.
 
 ---
