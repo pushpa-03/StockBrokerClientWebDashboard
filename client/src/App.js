@@ -3,7 +3,13 @@ import { io } from "socket.io-client";
 import Login from "./components/Login";
 import Dashboard from "./components/Dashboard";
 
-const SOCKET_URL = "http://localhost:4000";
+import { io } from "socket.io-client";
+
+const socket = io("https://stock-dashboard-backend-o3t7.onrender.com", {
+  transports: ["websocket"],
+  withCredentials: true,
+});
+
 
 export default function App() {
   const [socket, setSocket] = useState(null);
