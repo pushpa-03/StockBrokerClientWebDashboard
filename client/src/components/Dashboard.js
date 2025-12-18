@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import StockCard from "./StockCard";
 import StockChart from "./StockChart";
 import TransactionTable from "./TransactionTable";
@@ -6,6 +6,10 @@ import ProfileMenu from "./ProfileMenu";
 import { saveAs } from "file-saver";
 import { ToastContainer, toast } from "react-toastify";
 import { ThemeContext } from "../context/ThemeContext";
+import AdsBanner from "./AdsBanner";
+import SummaryCards from "./SummaryCards";
+import MarketFeed from "./MarketFeed";
+
 
 export default function Dashboard({ socket, user, onLogout }) {
   const [availableTickers, setAvailableTickers] = useState([]);
@@ -24,51 +28,50 @@ export default function Dashboard({ socket, user, onLogout }) {
 });
 
   const { theme, setTheme } = useContext(ThemeContext);
-  const mountedRef = useRef(false);
+  const marketFeed = history.slice(0, 6).map((h) => ({
+  id: h.id,
+  stock: h.stock,
+  type: h.type,
+  price: h.price,
+  time: h.time,
+}));
+
+
 
   useEffect(() => {
-    mountedRef.current = true;
-    if (!socket) return;
-    if (!socket.connected) socket.connect();
+  if (!socket || !user?.email) return;
 
-    socket.emit("login", { email: user.email }, (resp) => {
-      if (resp) {
-        setAvailableTickers(resp.tickers || []);
-        setPrices(resp.stocks || {});
-      }
-    });
-   
+  socket.emit("login", { email: user.email }, (resp) => {
+    if (resp) {
+      setAvailableTickers(resp.tickers || []);
+      setPrices(resp.stocks || {});
+    }
+  });
 
-
-    socket.on("price-update", (payload) => {
-      setPrices(prev => {
-        const copy = { ...prev };
-        payload.forEach(s => {
-          copy[s.ticker] = s;
-        });
-        return copy;
-      });
-
-
-      payload.forEach(s => {
-        setChartData(prev => {
-          const arr = prev[s.ticker] ? [...prev[s.ticker]] : [];
-          arr.push({ time: new Date().toLocaleTimeString(), price: s.price });
-          if (arr.length > 30) arr.shift();
-          return { ...prev, [s.ticker]: arr };
-        });
-      });
+  socket.on("price-update", (payload) => {
+    setPrices((prev) => {
+      const copy = { ...prev };
+      payload.forEach((s) => (copy[s.ticker] = s));
+      return copy;
     });
 
-    socket.on("active-users", (list) => setActiveUsers(list || []));
+    payload.forEach((s) => {
+      setChartData((prev) => {
+        const arr = prev[s.ticker] ? [...prev[s.ticker]] : [];
+        arr.push({ time: Date.now(), price: s.price });
+        return { ...prev, [s.ticker]: arr.slice(-30) };
+      });
+    });
+  });
 
-    return () => {
-      socket.off("price-update");
-      socket.off("active-users");
-      mountedRef.current = false;
-    };
+  socket.on("active-users", setActiveUsers);
 
-  }, [socket]);
+  return () => {
+    socket.off("price-update");
+    socket.off("active-users");
+  };
+}, [socket, user?.email]);
+
 
    useEffect(() => {
   if (!user?.email) return;
@@ -136,6 +139,10 @@ useEffect(() => {
     toast.info("Snapshot downloaded");
   }
 
+   function handleAddMoney(amount) {
+    setBalance((b) => b + amount);
+    toast.success(`₹${amount} added to wallet`);
+  }
   function handleChangeEmail(newEmail) {
     if (!newEmail || !newEmail.includes("@")) return toast.error("Invalid email");
     const newUser = { email: newEmail, socketId: user.socketId };
@@ -145,8 +152,20 @@ useEffect(() => {
     onLogout();
   }
 
+ 
+
+
+
   return (
     <div className="dashboard-grid">
+        <AdsBanner />
+        <SummaryCards
+        balance={balance}
+        portfolio={portfolio}
+        subscriptions={subscriptions}
+        history={history}
+      />
+
       <ToastContainer />
 
       {/* ===================== TOP ROW ===================== */}
@@ -169,14 +188,21 @@ useEffect(() => {
           <div className="control-top">
             <div>
               <strong>{user.email}</strong>
-              <div className="small muted">Balance: ${balance.toFixed(2)}</div>
+              <div className="muted">Wallet Balance: ₹{balance.toLocaleString()}</div>
             </div>
 
             <div className="top-actions">
               <button className="btn" onClick={() => setTheme(theme === "dark" ? "light" : "dark")}>
                 {theme === "dark" ? "🌞 Light" : "🌙 Dark"}
               </button>
-              <ProfileMenu user={user} onLogout={onLogout} onChangeEmail={handleChangeEmail} />
+              <ProfileMenu
+              user={user}
+              walletBalance={balance}
+              onAddMoney={handleAddMoney}
+              onChangeEmail={handleChangeEmail}
+              onLogout={onLogout}
+            />
+
             </div>
           </div>
 
@@ -252,9 +278,9 @@ useEffect(() => {
       <div className="card transaction-row">
         <TransactionTable history={history} />
       </div>
+
+      <MarketFeed feed={marketFeed} />
+
     </div>
   );
-
-
-
 }

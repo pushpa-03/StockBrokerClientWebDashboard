@@ -7,37 +7,66 @@ const SOCKET_URL = "https://stock-dashboard-backend-o3t7.onrender.com";
 
 export default function App() {
   const [socket, setSocket] = useState(null);
-  const [user, setUser] = useState(() => {
-    const s = localStorage.getItem("stock_user");
-    return s ? JSON.parse(s) : null;
-  });
+  const [user, setUser] = useState(null);
+  const [ready, setReady] = useState(false); // 👈 NEW
 
+  // 🔌 Create & connect socket ONCE
   useEffect(() => {
-    const s = io(SOCKET_URL, { autoConnect: false });
+    const s = io(SOCKET_URL, {
+      transports: ["websocket"],
+      reconnection: true,
+    });
+
+    s.on("connect", () => {
+      console.log("Socket connected:", s.id);
+      setReady(true);
+    });
+
     setSocket(s);
+
     return () => s.disconnect();
   }, []);
 
+  // 🔐 Restore user AFTER socket is ready
+  useEffect(() => {
+    if (!ready) return;
+
+    const saved = localStorage.getItem("stock_user");
+    if (saved) {
+      try {
+        setUser(JSON.parse(saved));
+      } catch {
+        localStorage.removeItem("stock_user");
+      }
+    }
+  }, [ready]);
+
+  // 💾 Persist login
   useEffect(() => {
     if (user) localStorage.setItem("stock_user", JSON.stringify(user));
     else localStorage.removeItem("stock_user");
   }, [user]);
 
+  if (!ready) {
+    return <div className="app-loading">Connecting to server…</div>;
+  }
+
   return (
     <div className="app-root">
-          <header className="app-header header-glass">
-      <div className="brand">
+      <header className="app-header header-glass">
         <h1>Stock Broker Client</h1>
         <div className="sub">Real-time simulated market</div>
-      </div>
-    </header>
-
+      </header>
 
       <main className="app-main">
         {!user ? (
-          <Login socket={socket} onLogin={(u) => setUser(u)} />
+          <Login socket={socket} onLogin={setUser} />
         ) : (
-          <Dashboard socket={socket} user={user} onLogout={() => setUser(null)} />
+          <Dashboard
+            socket={socket}
+            user={user}
+            onLogout={() => setUser(null)}
+          />
         )}
       </main>
 

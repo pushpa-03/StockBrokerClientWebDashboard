@@ -23,29 +23,31 @@ export default function Login({ socket, onLogin }) {
   }
 
   function handleLogin(e) {
-    e.preventDefault();
-    setError(null);
+  e.preventDefault();
+  setError(null);
 
-    if (!email || !email.includes("@")) {
-      setError("Please enter a valid email.");
-      return;
+  if (!email || !email.includes("@")) {
+    setError("Please enter a valid email.");
+    return;
+  }
+
+  setLoading(true);
+
+  socket.emit("login", { email }, (resp) => {
+    setLoading(false);
+
+    if (resp?.success) {
+      const user = { email, socketId: resp.socketId };
+      localStorage.setItem("stock_user", JSON.stringify(user));
+      onLogin(user);
+    } else {
+      setError("Login failed. Try again.");
     }
 
-    setLoading(true);
+    clearFields();
+  });
+}
 
-    if (!socket.connected) socket.connect();
-
-    socket.emit("login", { email }, (resp) => {
-      setLoading(false);
-
-      if (resp?.success) {
-        onLogin({ email, socketId: resp.socketId });
-        clearFields(); // ✅ clear after successful login
-      } else {
-        setError("Login failed. Try again.");
-      }
-    });
-  }
 
   return (
     <div className="login-outer">
