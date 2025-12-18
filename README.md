@@ -105,9 +105,24 @@ node index.js
 cd client
 npm install
 npm start
-
+```
 
 ---
 
+## Web Dashboard Screenshots
+
+### Login screen
+<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/8a7f6f1c-2ace-4b72-a254-99e54d696777" />
+
+### User1
+<img width="1920" height="1020" alt="Screenshot 2025-12-17 080608" src="https://github.com/user-attachments/assets/f3fce2f2-dc86-48a8-9a78-5259926345f1" />
 
 
+<img width="1920" height="1020" alt="Screenshot 2025-12-17 080731" src="https://github.com/user-attachments/assets/7fa61ea9-24ba-40f1-8910-518e9756edb2" />
+
+
+<img width="1920" height="1020" alt="Screenshot 2025-12-17 080759" src="https://github.com/user-attachments/assets/d4fded05-fc84-4288-99ef-ed392f34843c" />
+
+
+### User2
+<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/5a6bf0e1-947b-4eb4-aa6e-256a1eaa4372" />
