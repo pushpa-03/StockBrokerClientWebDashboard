@@ -112,17 +112,27 @@ npm start
 ## Web Dashboard Screenshots
 
 ### Login screen
-<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/8a7f6f1c-2ace-4b72-a254-99e54d696777" />
+<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/81845d5d-9fc1-4163-b49b-bbd3320dcf76" />
 
+---
 ### User1
-<img width="1920" height="1020" alt="Screenshot 2025-12-17 080608" src="https://github.com/user-attachments/assets/f3fce2f2-dc86-48a8-9a78-5259926345f1" />
+<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/d1fee92f-18bc-4945-b8cb-9b6f91922279" />
 
+---
 
-<img width="1920" height="1020" alt="Screenshot 2025-12-17 080731" src="https://github.com/user-attachments/assets/7fa61ea9-24ba-40f1-8910-518e9756edb2" />
+<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/b7475865-14ef-4d5c-9b2e-78f2e43177a4" />
 
+---
 
-<img width="1920" height="1020" alt="Screenshot 2025-12-17 080759" src="https://github.com/user-attachments/assets/d4fded05-fc84-4288-99ef-ed392f34843c" />
+<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/fda80308-1fb5-4aea-bc13-397688038adc" />
 
+---
 
+<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/4a6f6c1f-ac94-411e-8b02-146d283d4684" />
+
+---
 ### User2
-<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/5a6bf0e1-947b-4eb4-aa6e-256a1eaa4372" />
+<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/9dd46f17-fd61-4664-bd5b-2818e730c5ed" />
+
+---
+<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/4ea64e08-8242-431f-a91a-5b2509d26a97" />
